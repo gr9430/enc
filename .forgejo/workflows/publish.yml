@@ -6,9 +6,13 @@ jobs:
     runs-on: codeberg-tiny
     steps:
       - uses: actions/checkout@v5
+      - run: |
+          mkdir _site
+          cp -r *.html *.css *.js images _site/ 2>/dev/null || true
       - uses: actions/git-pages@v2
         with:
           site: https://glennritchey.xyz/
+          path: enc
           server: codeberg.page
           token: ${{ forge.token }}
-          source: ./
+          source: _site/
