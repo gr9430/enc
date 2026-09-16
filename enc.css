@@ -32,6 +32,21 @@ html.ice {
   --accent: #ff5f87; --rule: #16273a;
 }
 
+/* Light mode — paper terminal, not a color-scheme swap of the phosphor look */
+html.light {
+  --bg:        #f4f1ea;
+  --bg-raised: #e9e4d6;
+  --fg:        #234421;
+  --fg-dim:    #6b7d67;
+  --fg-bright: #10240f;
+  --accent:    #a34e00;
+  --rule:      #cfc8b4;
+}
+html.light img, html.light video, html.light canvas, html.light svg {
+  filter: none;
+}
+html.light h1::after { background: var(--fg); }
+
 *, *::before, *::after { box-sizing: border-box; }
 
 html {
@@ -326,4 +341,21 @@ html.scanlines body::after {
 .banner .tagline {
   margin: calc(0.5 * var(--line)) 0 0;
   color: var(--fg-dim);
+}
+
+/* ---------- theme toggle ---------- */
+
+.theme-toggle {
+  position: fixed;
+  right: max(calc(2 * var(--ch)), env(safe-area-inset-right, 0px));
+  bottom: max(calc(2 * var(--ch)), env(safe-area-inset-bottom, 0px));
+  z-index: 20;
+  margin: 0;
+  min-height: 44px;
+  padding: 0 calc(2 * var(--ch));
+  background: var(--bg-raised);
+}
+
+@media (max-width: 40rem) {
+  .theme-toggle { font-size: 0.9375rem; }
 }
