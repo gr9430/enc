@@ -2,9 +2,7 @@
   var KEY = "enc-theme";
 
   function isLight(theme) {
-    if (theme === "light") return true;
-    if (theme === "dark") return false;
-    return matchMedia("(prefers-color-scheme: light)").matches;
+    return theme === "light";
   }
 
   document.documentElement.classList.toggle("light", isLight(localStorage.getItem(KEY)));
