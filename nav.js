@@ -6,11 +6,11 @@
 
   // Navigation links
   const links = [
-    ['Home', '/enc'],
-    ['1101', '/enc1101/lectures/'],
-    ['1102', '/enc1102/lectures/'],
-    ['Files', '/encfiles/'],
-    ['Q&A', '/enceportfolios/q-a/']
+    ['Home', 'enc'],
+    ['1101', 'enc1101/lectures/'],
+    ['1102', 'enc1102/lectures/'],
+    ['Files', 'encfiles/'],
+    ['Q&A', 'enceportfolios/q-a/']
   ];
 
   // Create nav element
