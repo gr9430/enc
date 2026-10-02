@@ -245,7 +245,24 @@ button:hover, input[type="submit"]:hover {
 
 /* ---------- nav ---------- */
 
-nav ul { display: flex; flex-wrap: wrap; gap: 0 calc(2 * var(--ch)); }
+nav {
+  margin: 0 0 var(--line);
+  padding: calc(0.5 * var(--line)) 0;
+  text-align: center;
+}
+nav::before,
+nav::after {
+  content: "--------------------------------------";
+  display: block;
+  color: var(--fg-dim);
+  white-space: nowrap;
+  overflow: hidden;
+}
+nav::before { margin-bottom: calc(0.25 * var(--line)); }
+nav::after  { margin-top: calc(0.25 * var(--line)); }
+
+nav ul { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 calc(2 * var(--ch)); }
+nav ul li { padding-left: 0; }
 nav ul li::before { content: none; }
 nav a { text-decoration: none; }
 nav a::before { content: "["; color: var(--fg-dim); }
@@ -291,8 +308,6 @@ html.scanlines body::after {
   a { color: #000; }
   h1::after, html.scanlines body::after { display: none; }
 }
-
-/* ---------- MLA specimen block ---------- */
 
 /* ---------- MLA specimen block ---------- */
 
@@ -358,4 +373,166 @@ html.scanlines body::after {
 
 @media (max-width: 40rem) {
   .theme-toggle { font-size: 0.9375rem; }
+}
+
+/* ---------- question explorer (.qviz) ----------
+   Markup:
+   <div class="qviz">
+     <h1 class="qviz-title">Student Responses to …</h1>
+     <p class="qviz-meta">ENC 1101 · ENC 1102</p>
+     <div class="qviz-band">
+       <button class="qviz-seg" style="flex:9" aria-pressed="true">
+         <span class="qviz-num">01</span><span class="qviz-count">9</span>
+       </button> …
+     </div>
+     <div class="qviz-body">
+       <div class="qviz-list">
+         <button class="qviz-row" aria-pressed="true">
+           <span class="qviz-num">01</span><span>Theme title</span><span>9</span>
+         </button> …
+       </div>
+       <div class="qviz-detail">
+         <h2>Theme title</h2>
+         <p>Unified question…</p>
+         <div class="qviz-group">
+           <span class="qviz-sec">§ 2.1</span>
+           <div><p class="qviz-q">Question… <span class="qviz-meta">ENC 1101</span></p></div>
+         </div> …
+       </div>
+       <div class="qviz-response"> … </div>   (third column)
+     </div>
+   </div>
+   Selected state is aria-pressed="true" on both .qviz-seg and .qviz-row. */
+
+.qviz { margin: 0 0 calc(2 * var(--line)); }
+
+/* Break out of the 72ch body measure so all three columns fit.
+   Body is left-aligned, so the explorer simply extends to the right. */
+body:has(.qviz) { max-width: none; }
+body:has(.qviz) > :not(.qviz) { max-width: var(--measure); }
+.qviz { width: 100%; max-width: 77.5rem; }
+
+.qviz-title { font-style: italic; margin-bottom: calc(0.5 * var(--line)); }
+
+.qviz-meta {
+  display: block;
+  color: var(--fg-dim);
+  font-size: 0.8125rem;
+}
+p.qviz-meta {
+  margin: 0 0 var(--line);
+  padding-bottom: var(--line);
+  border-bottom: 2px solid var(--rule);
+}
+
+/* Reset the site-wide [bracket] buttons inside the explorer */
+.qviz button {
+  font: inherit;
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+  text-align: left;
+}
+.qviz button::before,
+.qviz button::after { content: none; }
+
+/* Proportional band: one segment per theme, flex = question count */
+.qviz-band {
+  display: flex;
+  gap: 2px;
+  height: calc(4 * var(--line));
+  margin-bottom: var(--line);
+}
+.qviz-seg {
+  flex: 1;
+  min-width: 0;
+  padding: calc(0.5 * var(--ch)) var(--ch);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--fg);
+  color: var(--bg);
+}
+.qviz-seg:hover { background: var(--fg-bright); color: var(--bg); }
+.qviz-seg[aria-pressed="true"] {
+  background: transparent;
+  color: var(--fg);
+  box-shadow: inset 0 0 0 2px var(--fg);
+}
+.qviz-seg[aria-pressed="true"]:hover { background: var(--bg-raised); }
+
+.qviz-num   { font-size: 0.6875rem; font-weight: 700; }
+.qviz-count { font-size: 1.5rem; font-weight: 700; line-height: 1; }
+
+/* Theme list + detail */
+.qviz-body {
+  display: grid;
+  grid-template-columns: 29ch minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: calc(4 * var(--ch));
+  border-top: 2px solid var(--fg);
+  padding-top: var(--line);
+}
+
+.qviz-list { display: flex; flex-direction: column; }
+.qviz-row {
+  display: grid;
+  grid-template-columns: 3ch minmax(0, 1fr) 2ch;
+  gap: var(--ch);
+  padding: calc(0.4 * var(--line)) 0;
+  background: transparent;
+  color: var(--fg);
+  font-size: 0.875rem;
+  line-height: 1.3;
+  border-bottom: 1px solid var(--rule);
+}
+.qviz-row > :last-child { text-align: right; }
+.qviz-row:hover { background: transparent; color: var(--fg-bright); }
+.qviz-row[aria-pressed="true"] { color: var(--fg-bright); font-weight: 700; }
+.qviz-row .qviz-num { padding-top: 2px; }
+
+.qviz-detail h2 { margin: 0 0 var(--line); }
+.qviz-detail > p { margin: 0 0 var(--line); text-wrap: pretty; }
+
+.qviz-group {
+  display: grid;
+  grid-template-columns: 9ch minmax(0, 1fr);
+  gap: calc(2 * var(--ch));
+  border-top: 2px solid var(--rule);
+  padding-top: calc(0.5 * var(--line));
+  margin-bottom: var(--line);
+}
+.qviz-sec { font-weight: 700; color: var(--fg-bright); }
+.qviz-q {
+  margin: 0 0 calc(0.5 * var(--line));
+  font-size: 0.875rem;
+  text-wrap: pretty;
+}
+
+/* Instructor response — <div class="qviz-response"><h2>Instructor response</h2><blockquote><p>…</p></blockquote></div> */
+.qviz-response h2 { margin: 0 0 var(--line); }
+.qviz-response blockquote {
+  margin: 0;
+  border-left: 2px solid var(--fg);
+  color: var(--fg);
+}
+.qviz-response blockquote p { margin: 0 0 calc(0.5 * var(--line)); text-wrap: pretty; }
+.qviz-response blockquote p:last-child { margin-bottom: 0; }
+.qviz-response .qviz-pending { color: var(--fg-dim); }
+
+@media (max-width: 64rem) {
+  .qviz-body { grid-template-columns: 29ch minmax(0, 1fr); }
+  .qviz-response { grid-column: 2; border-top: 2px solid var(--fg); padding-top: var(--line); }
+}
+
+@media (max-width: 40rem) {
+  .qviz-response { grid-column: auto; }
+  .qviz-body { grid-template-columns: minmax(0, 1fr); }
+  .qviz-response { border-top: 2px solid var(--fg); padding-top: var(--line); }
+  .qviz-group { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .qviz-band { height: calc(3 * var(--line)); }
+}
+
+@media print {
+  .qviz-seg { background: #000; color: #fff; }
+  .qviz-seg[aria-pressed="true"] { background: #fff; color: #000; box-shadow: inset 0 0 0 2px #000; }
 }

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Student Questions - ePortfolio Guide</title>
+<link rel="stylesheet" href="../../enc.css">
+<script src="../../theme.js"></script>
+<script src="../../nav.js" defer></script>
+<style>
+  /* Override qviz width expansion to match other pages */
+  body:has(.qviz) { max-width: var(--measure); }
+  .qviz { max-width: none; }
+
+  /* Stack buttons in 2 rows */
+  .qviz-band { flex-wrap: wrap; height: auto; }
+  .qviz-seg { flex: 1 1 calc(25% - 2px); min-width: 80px; height: calc(3 * var(--line)); }
+
+  /* Stack body sections vertically */
+  .qviz-body { grid-template-columns: 1fr; }
+  .qviz-list { display: none; }
+
+  /* Collapsible main section */
+  details.qviz > summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 1ch;
+  }
+  details.qviz > summary::-webkit-details-marker { display: none; }
+  details.qviz:not([open]) > summary::before {
+    content: "[+]";
+    color: var(--fg-dim);
+    font-weight: 400;
+  }
+  details.qviz[open] > summary::before {
+    content: "[-]";
+    color: var(--fg-dim);
+    font-weight: 400;
+  }
+  details.qviz > summary > h1 {
+    display: inline;
+    margin: 0;
+  }
+</style>
+</head>
+<header class="banner">
+  <pre class="ascii" aria-hidden="true">
+ |||||||            ||   
+ ||   ||    ||    ||  || 
+|||   |||  ||||  |||  |||
+ ||   ||    ||   ||||||||
+  |||||\\        |||  |||
+  </pre>
+  <p>Student responses to readings, and my responses.</p>
+  <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle light/dark mode">toggle theme</button>
+</header>
+<body>
+<details class="qviz">
+  <summary><h1 class="qviz-title">ePortfolios: A Guide For Writers</h1></summary>
+  <p class="qviz-meta">ENC 1101 &middot; ENC 1102</p>
+
+  <div class="qviz-band" id="qviz-band"></div>
+
+  <div class="qviz-body">
+    <div class="qviz-list" id="qviz-list"></div>
+    <div class="qviz-detail" id="qviz-detail"></div>
+    <div class="qviz-response" id="qviz-response"></div>
+  </div>
+</details>
+
+<script>
+const RESPONSES = [
+  `Yes, performative is a bit of a loaded term in the popular consciousness. However, the ePortfolio encourages students to showcase the iterative quality of the work that they are doing throughout the semester. Consider how you all will be required to "include multiple drafts of at least one of the major writing assignments. For example: Draft 1, Draft 2, Final — and discuss the feedback you received and the revisions you made throughout the writing process" (ePortfolio prompt, "What are the requirements?").
+
+What is left out comes down to what the student chooses to curate. Technically, students could include every single draft of every major assignment. These days, I do encourage students to turn in every assignment through the ePortfolio so they are working on this major assignment throughout the whole semester. Part of why I am able to do this that I tend toward holistic, overview types of feedback on assignments rather than line comments and annotations.
+
+I argue that the way to keep things authentic, and not have this assignment seem like boxes to just check off, is to treat the writing reflections we do in class with vulnerability (at least, as much as one would be comfortable with sharing online). Part of the idea of developing a learning community in our class is to understand that we all undergo similar trials and tribulations with writing. The reflective work is meant to help write in an open environment, to vent and to get ideas flowing through what sometimes seems like unproductive writing. This type of writing also helps students look back at the end of the semester and evaluate all of the growth they might not have necessarily forecasted.`,
+  `I would encourage students to consider the positive aspects of having assigned and self-motivated reasons blur together because, when these aspects blur, students begin to think about how the systems they operate within are not the sole authority in the sum of their experiences. There's certainly a difference between professional and personal work and students will weigh those motivations differently, which is part of the point of students learning to value their own embodied knowledge and experience according to their priorities. When no exigency is assigned, it comes from what students already know and care about, regardless of the domain.
+
+Part of what we try to do in first-year composition is to have students recognize where their expertise from their backgrounds may be complemented by the collegiate environment; the goal is knowledge production and not memorization. Great work is never the result of a solitary genius only some of us have, but of a process where practice makes better. When students start combining their own work into a class ePortfolio, they develop ownership over their sense of their scholarly and extra scholarly identities. From that point, I would encourage students to look back at each type of work and revise even further from there. But I might be getting ahead of myself with that one.`,
+
+`<a href="https://pressbooks.online.ucf.edu/eportfolios/chapter/1-2-who-uses-eportfolios/">Section 1.2</a> of <i>ePortfolios: A Guide for Writers</i> shares examples of professionals, celebrities, and artists alike who all maintain ePortfolios. It is less of approximating the value through research but understanding that this format is fairly ubiquitous when it comes to anyone advertising themselves. Part of the longevity of an ePortfolio is in fact updating it as you change, and these things include your interests, major, or career plans. My ePortfolio definitely looks different today from when I created my first website almost 10 years ago. When it comes to learning outcomes, this is pretty academic, but every course has its own set of student learning outcomes. The point of these outcomes, generally speaking, is to develop transferable skills that will benefit your work and growth beyond the college experience.
+
+Creating a personal website rather than using, say, social media is that one has more likelihood of ongoing ownership over their data when using a personal website. Obviously, this is subject to terms and conditions, but the raw files that go into building a website are typically in the hands of the person creating that website. With social media, one is essentially posting into a collection of servers and hoping that data will always be there for them; this includes text posts, videos, audio, and images. Rather than considering one over the other, cultivating both aspects of a digital footprint are worthwhile. Social media posts are more like the day-to-day and the website is more like the highlight reel to showcase big projects or an ongoing writing practice.`,
+  `This is part of navigating genre conventions and learning to distinguish between the two. Sometimes people will separate their digital identity into different use cases. This isn't a way of saying that some will try and deceive people, but sometimes the, say, artwork one does differs quite a bit from, perhaps, the research work that they do. And even if one informs the other, there is still the need to recognize the occasion that the work addresses and how to most effectively represent it. Provocative tends to become a loaded term, so it's also a matter of recognizing whether there might be more generalized ways of getting one's point across that considers the diverse audience one composes to.`,
+
+  `The issue of the homogenization of user interfaces has long been a concern and it's one that I started to share when the iPhone, or mobile operating systems, became contenders for the primary way individuals interact with their day-to-day digital environments. Templates are great because they are inherently accessible in that people with no coding experience tend to be able to create without extensive background knowledge of that type of composition. However, the amount of templates that others create can tend to be limiting. It's complicated, because not everyone wants to learn HTML, JS, or CSS, but they would probably find those skills useful, especially when trying to set oneself apart from the rest.
+
+For resources on making the multimodal compositions more accessible, I would consult the <a href="https://www.w3.org/WAI/standards-guidelines/wcag/">Web Content Accessibility Guidelines</a> published by the Web Accessibility Initiative. I also recommend <a href="https://pressbooks.online.ucf.edu/eportfolios/chapter/3-2-what-ethics-and-accessibility-elements-should-i-consider-when-designing-my-eportfolio/">Section 3.2</a> of <i>ePortfolios: A Guide for Writers</a>.`,
+  `In my attempt to answer this as effectively as possible, I wish to share a brief section from Ngũgĩ wa Thiong'o's "The Language of African Theatre":
+
+In the theatre that I was used to in school and colleges and in amateur circles, the actors rehearsed more or less in secrecy and then sprung their finished perfection on an unsuspecting audience who were of course surprised into envious admiration . . . Kamirithu was the opposite of this. The Kamirithu practice was part of education as a process of demystifying knowledge and hence reality. People could see how the actors evolved from the time they could hardly move their legs or say their lines to a time when they could talk and move about the stage as if they were born talking those lines or moving on that stage. . . . Perfection was thus shown to be a process, a historical social process, but it was admired no less. On the contrary they identified with that perfection even more because it was a product of themselves and their collective contribution. It was a heightening of themselves as a community. (56-7)
+
+When we put our process on display, we are showing that part of our ownership is recognizing that, amongst ourselves, we are all working to produce the best reflections of ourselves. Not every peer review will be careful, and no writing is unbiased. However, even in performing peer review that cannot always be inspired, we operate as a classroom community and demonstrate that none of us arrive to the final product without effort. Through this process, we learn to appreciate our labor, as well as that of others, and we stand to learn new approaches to our own work while sharing our insight with others. Therefore, we further develop our own knowledge and perspectives.
+
+Concerning tensions between consent, privacy and ownership, it is always a matter of figuring out how to best apply those values in a way that honors yourself and others. With that said, there is a difference between using an image of a friend or family member--definitely clear that with those people--and an image of a celebrity, or a widely circulated image where the total expectation of consent and privacy is obscured by its publicness. In part, this ties into the question of ownership, and helps illuistrate why it is generally a good idea to cite the usage of an image (in this case). Or, to do one's best to anonymize identifying details that are irrelevant to reproducing that image.`,
+  `In practice, students should consult their professor about campus resources. There's a chance they have or will schedule a presentation from the Writing entre or a library presentation to help guide students to learn more about using these resources. Every professor's plan will vary. When there is no prior experience or confidence at the level of experience, it's always good to think through a few basic questions to help get the conversation going.`
+];
+
+const THEMES = [
+  ["Evidence of learning or polished performance?", "The book claims an ePortfolio shows cumulative learning and development in ways grades and single assignments can't. But if it's \"inherently performative,\" and students select and polish their strongest work for a grade, does it make learning visible or hide it? Should a portfolio show work that started rough and improved, how can it show growth in areas it leaves out, and what keeps it from becoming a box to check rather than real reflection?"],
+  ["Exigency: \"I have to\" or \"I want to\"?", "Every ePortfolio begins with an exigency, but for most students the first one is a course requirement. Does folding assigned and self-motivated reasons into one word blur a real difference? Where does an exigency come from when none is given, and does a class portfolio have room for work made for your own reasons?"],
+  ["Life beyond the course", "What evidence shows an ePortfolio matters after the course ends, and for whom: English majors only, or anyone? If it's meant to last, should it keep changing as your interests, major, or career plans change, how do its learning outcomes carry into a new field, and why a personal website rather than the platforms where people already spend their time?"],
+  ["Voice, audience, and professionalism", "An ePortfolio has to reach several audiences at once. How do you keep it creative and distinctly yours while adjusting for all of them, make it different from portfolios you've built before, and decide whether \"professional\" means toning down rhetoric that is deliberately provocative?"],
+  ["Design, arrangement, and templates", "How do you make meaningful rhetorical and design decisions on a platform whose templates make portfolios look nearly identical? For students new to the form, how do you arrange artifacts to show development, choose between words, visuals, and diagrams, and make the result readable, usable, and accessible for readers you can't ask directly?"],
+  ["Ethics and community", "An ePortfolio is public and social: others read it, review it, and appear in it. What do classmates actually gain from reading each other's portfolios, what happens when peer review is careless or biased, and what do you do when the book's commitments to consent, privacy, and ownership pull against each other?"],
+  ["Resources and prior experience", "The book points to campus resources and prior experience as things to build an ePortfolio from. What does that look like in practice when the chapter lists resources without a plan for using them, or when you have no prior experience in a subject to draw on?"]
+];
+
+const QUESTIONS = [
+  [1, "1101", "1", "How does an ePortfolio show a writer's development differently than receiving grades on assignments?"],
+  [1, "1101", "Ch. 2", "Can an ePortfolio really show a viewer that I learned something, or does it show the finished product while the learning stays unseen?"],
+  [1, "1101", "2.1", "The chapter claims ePortfolios show cumulative learning greater than any artifact or exam. Could it explain why, and compare against what it claims to surpass?"],
+  [1, "1102", "1.4", "If ePortfolios are \"inherently performative,\" and performative often means style without substance, are they more than a performance?"],
+  [1, "1102", "", "How can teachers design ePortfolio assignments so students treat them as real reflection rather than something to check off?"],
+  [1, "1102", "", "If students choose only their strongest work, doesn't that bias the ePortfolio? How do they grow in areas they don't show?"],
+  [1, "1102", "", "If we make our ePortfolio look perfect for professors to get a good grade, won't that hide our actual mistakes?"],
+  [1, "1102", "", "If you only show your most effective work, how do you know where to improve? Wouldn't it be better to show work that started weak and got better?"],
+  [1, "1102", "", "How can I show growth as a writer if I'm only responding to readings about academic writing rather than reading a variety of writing from different backgrounds?"],
+  [2, "1101", "Ch. 1", "If every ePortfolio begins with an exigency, how do you find one when it isn't given?"],
+  [2, "1101", "Ch. 1", "By putting a class assignment and a personal desire to reflect under the same word, doesn't \"exigency\" blur the difference between \"I have to\" and \"I want to\"?"],
+  [2, "1101", "", "If ePortfolios are dynamic spaces to showcase learning to an audience, will ours be strictly class assignments, or can personal work be included?"],
+  [3, "1102", "1.3", "Where does the research showing ePortfolios outlast a single course come from? Isn't a course portfolio mostly useful for English majors?"],
+  [3, "1102", "Ch. 5", "How do I carry my ePortfolio learning outcomes over to a new major?"],
+  [3, "1102", "1.4", "Should I keep editing my ePortfolio as I gain experience and my interests or career plans change?"],
+  [3, "1102", "", "Why is a personal website the best form? Why not a social media post or profile, where most media is consumed?"],
+  [4, "1102", "1.3", "If ePortfolios must reach multiple audiences, how do you keep your uniqueness and creativity while adjusting tone for all of them?"],
+  [4, "1102", "", "How can I approach my ePortfolio differently this time to make it stand out from a previous one?"],
+  [4, "1102", "1.5", "How can someone who uses provocative rhetoric, even profanity, for effect on topics like civil rights still present themselves professionally?"],
+  [5, "1102", "", "How can students make meaningful rhetorical and design decisions when portfolio sites are pre-made and limited in customization?"],
+  [5, "1102", "Ch. 5", "How do you design accessibly when the platform forces specific templates that make portfolios look nearly identical?"],
+  [5, "1102", "Ch. 5", "The chapter says to \"arrange artifacts that best demonstrate your development,\" but how? That's confusing for students who've never made an ePortfolio."],
+  [5, "1102", "Ch. 5", "How do I make my ePortfolio readable and usable if I'm not familiar with making ePortfolios?"],
+  [5, "1101", "Ch. 2", "How should a writer decide between words, visuals, or diagrams when creating an ePortfolio, and how do they know what combination an audience wants without asking?", "Gagich 72; McAllan 40"],
+  [6, "1102", "", "How do others benefit from each other's ePortfolios when learning is so individual?"],
+  [6, "1102", "1.3", "If peer review is \"integral,\" what happens when peers give biased or careless feedback that misguides you?"],
+  [6, "1101", "3.2", "The chapter treats consent, privacy, and ownership as working together. What happens when they conflict, such as respecting the privacy of someone doing wrong?"],
+  [7, "1102", "Ch. 5", "How can I get the most out of UCF resources when the chapter lists benefits but no plan for using them?"],
+  [7, "1101", "2.3", "If people build from previous experience, how would someone do this with no previous experience or knowledge of a subject?"]
+];
+
+// Build theme data
+const themes = THEMES.map(([title, unified], i) => {
+  const questions = QUESTIONS
+    .filter(q => q[0] === i + 1)
+    .map(q => ({
+      course: "ENC " + q[1],
+      sec: q[2] ? (q[2].startsWith("Ch.") ? q[2] : "\u00A7 " + q[2]) : "\u2014",
+      text: q[3],
+      also: q[4] || ""
+    }));
+
+  // Group by section
+  const groups = [];
+  const seen = {};
+  questions.forEach(q => {
+    if (!seen[q.sec]) {
+      seen[q.sec] = [];
+      groups.push({ sec: q.sec, questions: seen[q.sec] });
+    }
+    seen[q.sec].push(q);
+  });
+
+  return {
+    n: i + 1,
+    num: String(i + 1).padStart(2, "0"),
+    title,
+    unified,
+    groups,
+    count: questions.length
+  };
+});
+
+let selected = 0;
+
+function render() {
+  // Band
+  const band = document.getElementById("qviz-band");
+  band.innerHTML = themes.map((t, i) => `
+    <button class="qviz-seg" style="flex:${t.count}" aria-pressed="${i === selected}" data-idx="${i}">
+      <span class="qviz-num">${t.num}</span>
+      <span class="qviz-count">${t.count}</span>
+    </button>
+  `).join("");
+
+  // List
+  const list = document.getElementById("qviz-list");
+  list.innerHTML = themes.map((t, i) => `
+    <button class="qviz-row" aria-pressed="${i === selected}" data-idx="${i}">
+      <span class="qviz-num">${t.num}</span>
+      <span>${t.title}</span>
+      <span>${t.count}</span>
+    </button>
+  `).join("");
+
+  // Detail
+  const t = themes[selected];
+  const detail = document.getElementById("qviz-detail");
+  detail.innerHTML = `
+    <h2>${t.title}</h2>
+    <p>${t.unified}</p>
+    ${t.groups.map(g => `
+      <div class="qviz-group">
+        <span class="qviz-sec">${g.sec}</span>
+        <div>
+          ${g.questions.map(q => `
+            <p class="qviz-q">${q.text}${q.also ? `<br><small>Also cites ${q.also}</small>` : ""} <span class="qviz-meta">${q.course}</span></p>
+          `).join("")}
+        </div>
+      </div>
+    `).join("")}
+  `;
+
+  // Response
+  const resp = document.getElementById("qviz-response");
+  const responseText = RESPONSES[selected];
+  const paras = responseText ? responseText.split(/\n\s*\n/) : ["Response forthcoming."];
+  resp.innerHTML = `
+    <h2>Instructor response</h2>
+    <blockquote>
+      ${paras.map(p => `<p${responseText ? "" : ' class="qviz-pending"'}>${p}</p>`).join("")}
+    </blockquote>
+  `;
+}
+
+function handleClick(e) {
+  const btn = e.target.closest("[data-idx]");
+  if (btn) {
+    selected = parseInt(btn.dataset.idx, 10);
+    render();
+  }
+}
+
+document.getElementById("qviz-band").addEventListener("click", handleClick);
+document.getElementById("qviz-list").addEventListener("click", handleClick);
+
+render();
+</script>
+</body>
+</html>
