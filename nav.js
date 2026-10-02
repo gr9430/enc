@@ -1,16 +1,15 @@
 // Site-wide navigation and footer
 (function() {
-  // Calculate path to root based on current URL depth
-  const depth = window.location.pathname.replace(/\/[^/]*$/, '').split('/').filter(Boolean).length;
-  const root = depth === 0 ? './' : '../'.repeat(depth);
+  // Base path for the site (adjust if deployed elsewhere)
+  const base = '/enc/';
 
-  // Navigation links
+  // Navigation links (paths relative to base)
   const links = [
-    ['Home', 'enc'],
-    ['1101', 'enc1101/lectures'],
-    ['1102', 'enc1102/lectures'],
-    ['Files', 'files'],
-    ['Q&A', 'enceportfolios/q-a']
+    ['Home', ''],
+    ['1101', '1101/lectures/'],
+    ['1102', '1102/lectures/'],
+    ['Files', 'files/'],
+    ['Q&A', 'eportfolios/q-a/']
   ];
 
   // Create nav element
@@ -19,7 +18,7 @@
   links.forEach(([label, path]) => {
     const li = document.createElement('li');
     const a = document.createElement('a');
-    a.href = root + path;
+    a.href = base + path;
     a.textContent = label;
     li.appendChild(a);
     ul.appendChild(li);
