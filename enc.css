@@ -536,3 +536,53 @@ p.qviz-meta {
   .qviz-seg { background: #000; color: #fff; }
   .qviz-seg[aria-pressed="true"] { background: #fff; color: #000; box-shadow: inset 0 0 0 2px #000; }
 }
+
+/* ---------- assignment pages ----------
+   .model        worked example callout
+   .table-scroll wrapper so wide tables scroll instead of breaking the measure
+   .fill-in      blank worksheet table (empty cells keep writing room)
+   .rubric       grading grid; tr.total for the summary row
+   .checklist    checkbox list */
+
+.model {
+  border-left: 2px solid var(--accent);
+  background: var(--bg-raised);
+  padding: calc(0.5 * var(--line)) calc(2 * var(--ch));
+  margin: 0 0 var(--line);
+}
+.model > :last-child { margin-bottom: 0; }
+
+.table-scroll {
+  overflow-x: auto;
+  margin: 0 0 var(--line);
+  -webkit-overflow-scrolling: touch;
+}
+.table-scroll > table { margin: 0; }
+
+.fill-in th, .fill-in td,
+.rubric th, .rubric td {
+  border: 1px solid var(--rule);
+  padding: calc(0.25 * var(--line)) var(--ch);
+}
+.fill-in th, .rubric th { background: var(--bg-raised); }
+.fill-in td:empty { height: calc(2 * var(--line)); min-width: 12ch; }
+
+.rubric { min-width: 60rem; font-size: 0.875rem; line-height: 1.4; }
+.rubric td:first-child { width: 22ch; }
+.rubric tr.total td { background: var(--bg-raised); color: var(--fg-bright); }
+
+/* Let the rubric use the full window instead of the 72ch measure */
+body:has(.rubric) { max-width: none; }
+body:has(.rubric) > :not(.table-scroll:has(.rubric)) { max-width: var(--measure); }
+
+ul.checklist li::before { content: "[ ]"; }
+ul.checklist li { padding-left: calc(4 * var(--ch)); }
+
+@media print {
+  .model, .fill-in th, .rubric th, .rubric tr.total td { background: none; }
+  .model { border-left-color: #000; }
+  .fill-in th, .fill-in td, .rubric th, .rubric td { border-color: #000; }
+  .table-scroll { overflow: visible; }
+  .rubric { min-width: 0; }
+  .theme-toggle { display: none; }
+}
